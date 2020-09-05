@@ -1,0 +1,32 @@
+import java.io.*;
+import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+		
+		HashMap<String,Integer> months = new HashMap<String,Integer>();
+		String path1 = "C:/Users/count/Desktop";         //Memory path location to the directory 
+       File directory=new File(path1);  //'directory' as directory accessor  
+       int fileCount = directory.list().length; 
+		String contents[] = directory.list();
+		
+		for(int i=0; i<contents.length; i++) {
+		Path file = Paths.get(contents[i]);
+        BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
+		if(!attr.isDirectory()){
+			Date newDate = new Date( (attr.creationTime()).toMillis() );
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM");
+			Integer count = months.containsKey(simpleDateFormat.format(newDate).toUpperCase()) ? months.get(simpleDateFormat.format(newDate).toUpperCase()) : 0;
+			months.put(simpleDateFormat.format(newDate).toUpperCase(), count + 1);
+		}
+      }
+        System.out.println(months);
+    }
+}
